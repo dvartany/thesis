@@ -33,15 +33,15 @@ plt.subplots_adjust(hspace=0.4)
 ax.text(.5,0.90,'Period Evolution, $\eta=.1$',
         horizontalalignment='center',transform=ax.transAxes, fontsize=22)
 
-t=linspace(10**-3,10**5,500000)
+t=linspace(10**0,10**5,500000)
 R=1.2*10**6
-B=10**14.
+B=10**15.
 G=6.674*10**(-8)
-M0=4*10**33.
+M0=2*1.4*10**33.
 c=3*10**10.
 u=B*R**3
 r=8.13*10**14
-eta=.1
+eta=10
 
 def I(M):
     return .35*M*R**2
@@ -80,6 +80,7 @@ def h((f,M),t):
 yinit=(2000*np.pi,M0)
 A=integrate.odeint(h,yinit,t)
 
-loglog(t,2*pi/(A.T[0]))
-print A.T[1]
+#loglog(t,2*pi/(A.T[0]))
+#loglog(t, (rm(A.T[1],t)/rc(A.T[0],A.T[1],t))**(1.5))
+print M
 #show()
