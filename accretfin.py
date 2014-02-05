@@ -1,9 +1,7 @@
 from scipy import integrate
 from pylab import *
 import matplotlib.pyplot as plt
-import numpy as np
 from numpy import *
-from pylab import *
 from matplotlib import rc, rcParams
 
 rc('text', usetex=True)
