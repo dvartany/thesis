@@ -2,7 +2,7 @@ from scipy import integrate
 from pylab import *
 import matplotlib.pyplot as plt
 from numpy import *
-from matplotlib import rc, rcParams
+from matplotlib import rcParams
 
 from plotparam import *
 
@@ -17,9 +17,11 @@ R=1.2*10**6
 B=10**15.
 G=6.674*10**(-8)
 M0=1.4*msun
+P0=10**-3
 c=3*10**10.
 u=B*R**3
-eta=10
+eta=1
+#initial period
 
 def I(M):
     return .35*M*R**2
@@ -55,7 +57,7 @@ def df(f,M,t):
 def h((f,M),t):
     return (df(f,M,t),mdot(f,M,t))
 
-yinit=(2000*pi,M0)
+yinit=(2*pi/P0,M0)
 A=integrate.odeint(h,yinit,t)
 #############################
 def aeriv(z,t):
@@ -70,20 +72,25 @@ z=integrate.odeint(aeriv,zinit,t)
 px=np.linspace(10**(-3),1,500000)
 #print A.T[1]/msun
 i=0
-while A.T[1][i]/msun < 2.5 and i<len(t)-1:
+while A.T[1][i]/msun < 3 and i<len(t)-1:
     i+=1
 
 print t[i]
 
 #print t[ np.abs(A.T[1]-2.5*msun) < 0.1]
-
+plt.subplot(2,1,1)
 p1,=loglog(t,2*pi/(A.T[0]),label=r'Mass Accretion', color='k')
-p2,=loglog(t, (rm(A.T[1],t)/rc(A.T[0],A.T[1],t))**(1.5),color='g')
 plt.xlabel("Time [s]", color='k')
 plt.ylabel("Period [s]", color='k')
 plt.twinx()
 plt.ylabel("Mass Accretion [$M_{\odot}$]", color ='b')
 plt.tick_params(labelcolor='b')
-p3,=plt.plot(t,(A.T[1]-M0)/msun, label=r'Period, \n $\eta=.1$',color='b')
-plt.legend((p1,p2, p3),("Period", "Fastness \n Parameter", "Mass Accretion"),loc=(0.7,0.06), frameon=False)
+p3,=plt.plot(t,(A.T[1])/msun, label=r'Period, \n $\eta=.1$',color='b')
+#plt.legend((p1,p3),("Period", "Mass Accretion"),loc=(0.7,0.06), frameon=False)
+plt.subplot(2,1,2)
+plt.xlabel("Time [s]", color='k')
+plt.ylabel("Fastness Parameter", color='k')
+p2,=loglog(t, (rm(A.T[1],t)/rc(A.T[0],A.T[1],t))**(1.5),color='g')
+#p4,=loglog(t,(R*4*A.T[0]**2)/(G*A.T[1]/R**2))
+#p5,=loglog(2*pi/A.T[0], R*4*A.T[0]**2/(G*A.T[1]/R**2))
 show()
